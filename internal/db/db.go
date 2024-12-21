@@ -11,19 +11,24 @@ import (
 
 var DB *gorm.DB
 
-// InitDB initializes the database connection
+// InitDB initializes the database connection and applies migrations
 func InitDB() {
+	// Load the database connection string from environment variables
 	dsn := config.Get("DATABASE_URL")
+
+	// Connect to the database
 	var err error
 	DB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		log.Fatalf("Failed to connect to the database: %v", err)
 	}
 
-	// Auto-migrate the database schema
-	if err := DB.AutoMigrate(&models.URL{}, &models.User{}); err != nil {
-		log.Fatalf("Failed to auto-migrate database schema: %v", err)
+	// Apply migrations
+	log.Println("Running migrations...")
+	if err := DB.AutoMigrate(&models.URL{}); err != nil {
+		log.Fatalf("Failed to migrate URL schema: %v", err)
 	}
+	log.Println("Migrations completed successfully.")
 
 	log.Println("Database connection initialized successfully.")
 }

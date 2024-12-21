@@ -1,0 +1,37 @@
+version: "3.9"
+services:
+  database:
+    image: postgres:17-bullseye
+    container_name: goshort_db
+    restart: always
+    environment:
+      POSTGRES_USER: goshort
+      POSTGRES_PASSWORD: goshort_password
+      POSTGRES_DB: goshort
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U goshort -d goshort"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: goshort_app
+    depends_on:
+      database:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+    environment:
+      DATABASE_URL: postgres://goshort:goshort_password@database:5432/goshort?sslmode=disable
+      JWT_SECRET: your-secret-key
+      PORT: 8080
+
+volumes:
+  postgres_data:

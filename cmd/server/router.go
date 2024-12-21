@@ -12,7 +12,9 @@ func setupRouter() *mux.Router {
 	// API V1 Routes
 	apiV1 := router.PathPrefix("/api/v1").Subrouter()
 	apiV1.HandleFunc("/shorten", v1.ShortenURL).Methods("POST")
-	apiV1.HandleFunc("/{shortURL}", v1.RedirectURL).Methods("GET")
+
+	// Redirect Route (catch-all)
+	router.HandleFunc("/{shortURL}", v1.RedirectURL).Methods("GET")
 
 	return router
 }

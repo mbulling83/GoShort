@@ -6,6 +6,7 @@ import (
 	"GoShort/internal/utils"
 	"encoding/json"
 	"net/http"
+	"time"
 )
 
 // ShortenRequest represents the request payload for URL shortening
@@ -40,11 +41,22 @@ func ShortenURL(w http.ResponseWriter, r *http.Request) {
 		shortURL = utils.GenerateShortURL()
 	}
 
+	// Parse expiry if provided
+	var expiry *time.Time
+	if req.Expiry != "" {
+		parsedExpiry, err := time.Parse(time.RFC3339, req.Expiry)
+		if err != nil {
+			http.Error(w, "Invalid expiry format", http.StatusBadRequest)
+			return
+		}
+		expiry = &parsedExpiry
+	}
+
 	// Save the URL to the database
 	url := models.URL{
 		LongURL:  req.LongURL,
 		ShortURL: shortURL,
-		Expiry:   req.Expiry,
+		Expiry:   expiry,
 	}
 	if err := db.DB.Create(&url).Error; err != nil {
 		http.Error(w, "Failed to save URL", http.StatusInternalServerError)

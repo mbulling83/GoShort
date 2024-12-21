@@ -9,7 +9,7 @@ import (
 
 // RedirectURL handles redirecting a short URL to its original URL
 func RedirectURL(w http.ResponseWriter, r *http.Request) {
-	shortURL := r.URL.Path[1:] // Extract short URL from path
+	shortURL := r.URL.Path[1:] // Extract the short URL from the path
 
 	var url models.URL
 	if err := db.DB.Where("short_url = ?", shortURL).First(&url).Error; err != nil {
@@ -18,12 +18,9 @@ func RedirectURL(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Check for expiration
-	if url.Expiry != "" {
-		expiryTime, err := time.Parse(time.RFC3339, url.Expiry)
-		if err == nil && time.Now().After(expiryTime) {
-			http.Error(w, "URL has expired", http.StatusGone)
-			return
-		}
+	if url.Expiry != nil && time.Now().After(*url.Expiry) {
+		http.Error(w, "URL has expired", http.StatusGone)
+		return
 	}
 
 	// Redirect to the original URL

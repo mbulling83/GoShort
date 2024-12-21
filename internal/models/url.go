@@ -8,7 +8,6 @@ type URL struct {
 	LongURL   string    `gorm:"not null"`
 	ShortURL  string    `gorm:"uniqueIndex;not null"`
 	CreatedAt time.Time `gorm:"autoCreateTime"`
-	Expiry    string    `gorm:"type:timestamp;"`
-	UserID    uint      `gorm:"index"`
+	Expiry    *time.Time `gorm:"type:timestamp"` // Optional expiry date
 	Clicks    int       `gorm:"default:0"`
 }

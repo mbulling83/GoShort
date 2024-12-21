@@ -12,13 +12,14 @@ GOLINT = golangci-lint
 GOFMT = gofmt
 GOGET = $(GOCMD) get
 GOMODTIDY = $(GOCMD) mod tidy
+DOCKER_COMPOSE = docker-compose
 
 # Build variables
 BUILD_FLAGS = -ldflags "-s -w"
 ENV_FILE = .env
 
 # Targets
-.PHONY: all build test lint fmt run clean install
+.PHONY: all build test lint fmt run clean install docker-up docker-down docker-build
 
 all: build
 
@@ -70,6 +71,20 @@ cleanup:
 	@echo "Cleaning up expired URLs..."
 	bash scripts/cleanup.sh
 
+docker-up:
+	@echo "Starting Docker containers..."
+	$(DOCKER_COMPOSE) up -d
+	@echo "Docker containers started."
+
+docker-down:
+	@echo "Stopping Docker containers..."
+	$(DOCKER_COMPOSE) down
+	@echo "Docker containers stopped."
+
+docker-build:
+	@echo "Building Docker images..."
+	$(DOCKER_COMPOSE) build
+	@echo "Docker images built."
 help:
 	@echo "Available targets:"
 	@echo "  build        Build the application"
@@ -82,3 +97,6 @@ help:
 	@echo "  migrate      Run database migrations"
 	@echo "  seed         Seed the database with test data"
 	@echo "  cleanup      Remove expired URLs from the database"
+	@echo "  docker-up    Start Docker containers (app and database)"
+	@echo "  docker-down  Stop Docker containers"
+	@echo "  docker-restart Restart Docker containers"
