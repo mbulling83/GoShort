@@ -16,13 +16,13 @@ COPY . .
 # Build the Go application
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags "-s -w" -o goshort ./cmd/server
 
-# Stage 2: Build the Svelte web application
+# Stage 2: Build the SvelteKit web application
 FROM node:18 AS web-builder
 
 # Set working directory
 WORKDIR /web
 
-# Copy the Svelte project files
+# Copy the SvelteKit project files
 COPY web/package.json web/package-lock.json ./
 COPY web/ ./
 
@@ -42,8 +42,8 @@ WORKDIR /app
 # Copy the Go application binary
 COPY --from=builder /app/goshort /app/goshort
 
-# Copy the Svelte build output to Nginx HTML folder
-COPY --from=web-builder /web/public /usr/share/nginx/html
+# Copy the SvelteKit build output to Nginx HTML folder
+COPY --from=web-builder /web/build /usr/share/nginx/html
 
 # Copy Nginx configuration
 COPY nginx.conf /etc/nginx/nginx.conf
