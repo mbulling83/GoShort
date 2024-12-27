@@ -35,10 +35,17 @@ func ShortenURL(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Generate a shortened URL
+	// Use custom URL if provided, otherwise generate a new one
 	shortURL := req.CustomURL
 	if shortURL == "" {
 		shortURL = utils.GenerateShortURL()
+	} else {
+		// Check if the custom URL already exists
+		var existingURL models.URL
+		if err := db.DB.Where("short_url = ?", shortURL).First(&existingURL).Error; err == nil {
+			http.Error(w, "Custom URL is already taken", http.StatusConflict)
+			return
+		}
 	}
 
 	// Parse expiry if provided
