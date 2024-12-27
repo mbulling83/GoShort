@@ -24,7 +24,7 @@ WORKDIR /web
 
 # Copy the Svelte project files
 COPY web/package.json web/package-lock.json ./
-COPY web/ ./ 
+COPY web/ ./
 
 # Install dependencies and build the web app
 RUN npm install
