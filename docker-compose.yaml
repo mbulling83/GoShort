@@ -1,5 +1,18 @@
-version: "3.9"
 services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: goshort
+    ports:
+      - "8081:80" # Frontend
+    environment:
+      DATABASE_URL: postgres://goshort:goshort_password@database:5432/goshort?sslmode=disable
+      JWT_SECRET: your-secret-key
+    depends_on:
+      database:
+        condition: service_healthy
+
   database:
     image: postgres:17-bullseye
     container_name: goshort_db
@@ -17,21 +30,6 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: goshort_app
-    depends_on:
-      database:
-        condition: service_healthy
-    ports:
-      - "8080:8080"
-    environment:
-      DATABASE_URL: postgres://goshort:goshort_password@database:5432/goshort?sslmode=disable
-      JWT_SECRET: your-secret-key
-      PORT: 8080
 
 volumes:
   postgres_data:

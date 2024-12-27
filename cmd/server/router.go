@@ -9,8 +9,8 @@ import (
 func setupRouter() *mux.Router {
 	router := mux.NewRouter()
 
-	// API V1 Routes
-	apiV1 := router.PathPrefix("/api/v1").Subrouter()
+	// V1 Routes
+	apiV1 := router.PathPrefix("/v1").Subrouter()
 	apiV1.HandleFunc("/shorten", v1.ShortenURL).Methods("POST")
 
 	// Redirect Route (catch-all)
