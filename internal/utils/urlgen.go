@@ -9,8 +9,8 @@ const shortURLEncoding = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ01
 
 // GenerateShortURL generates a random short URL path
 func GenerateShortURL() string {
-	length := 8 // Default length of the short URL
-	random := rand.New(rand.NewSource(time.Now().UnixNano())) // Create a local random generator
+	length := 8 
+	random := rand.New(rand.NewSource(time.Now().UnixNano())) 
 	result := make([]byte, length)
 	for i := range result {
 		result[i] = shortURLEncoding[random.Intn(len(shortURLEncoding))]
