@@ -8,6 +8,8 @@ import (
 	"net/http"
 )
 
+var version = "dev"
+
 func main() {
 	// Load configuration
 	config.Load()
@@ -23,6 +25,7 @@ func main() {
 
 	// Start the server
 	log.Println("Starting GoShort server on port 8080...")
+	log.Printf("Version: %s\n", version)
 	if err := http.ListenAndServe(":8080", router); err != nil {
 		log.Fatalf("Server failed to start: %v", err)
 	}
