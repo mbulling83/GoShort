@@ -17,7 +17,7 @@ services:
       - goshort_net
 
   goshort:
-    image: ghcr.io/kek-sec/goshort:1.0.1
+    image: petrakisg/goshort:1.0.1
     container_name: goshort_app
     environment:
       DATABASE_URL: postgres://goshort:goshort_password@goshort-db:5432/goshort?sslmode=disable
