@@ -1,6 +1,11 @@
 # ✂️ **GoShort** - Fast and customizable URL shortener
 
+![Docker Image Version](https://img.shields.io/docker/v/petrakisg/goshort?sort=semver&label=Docker%20Image%20Version&logo=docker)
+![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/kek-Sec/GoShort)
+
+
 ### Demo: [https://x.yup.gr](http://x.yup.gr)
+### DockerHub Image: [petrakisg/goshort](https://hub.docker.com/r/petrakisg/goshort)
 
 GoShort is a fast and customizable URL shortener built with Go , Svelte and TailwindCSS. It is designed to be self-hosted and easy to deploy.
 
